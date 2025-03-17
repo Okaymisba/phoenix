@@ -8,7 +8,7 @@ defmodule Helloworld.Accounts.UserNotifier do
     email =
       new()
       |> to(recipient)
-      |> from({"Helloworld", "contact@example.com"})
+      |> from({"Todoist", "msbahsarfaraz@gmail.com"})
       |> subject(subject)
       |> text_body(body)
 
