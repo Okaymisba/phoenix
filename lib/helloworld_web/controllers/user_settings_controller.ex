@@ -19,7 +19,9 @@ defmodule HelloworldWeb.UserSettingsController do
         Accounts.deliver_user_update_email_instructions(
           applied_user,
           user.email,
-          &url(~p"/users/settings/confirm_email/#{&1}")
+          fn token ->
+            "https://phoenix-production-4fd5.up.railway.app/users/settings/confirm_email/#{token}"
+          end
         )
 
         conn

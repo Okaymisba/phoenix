@@ -11,7 +11,9 @@ defmodule HelloworldWeb.UserConfirmationController do
     if user = Accounts.get_user_by_email(email) do
       Accounts.deliver_user_confirmation_instructions(
         user,
-        &url(~p"/users/confirm/#{&1}")
+        fn token ->
+          "https://phoenix-production-4fd5.up.railway.app/users/confirm/#{token}"
+        end
       )
     end
 
