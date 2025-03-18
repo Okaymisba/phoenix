@@ -13,7 +13,11 @@ defmodule HelloworldWeb.UserResetPasswordController do
     if user = Accounts.get_user_by_email(email) do
       Accounts.deliver_user_reset_password_instructions(
         user,
-        &url(~p"/users/reset_password/#{&1}")
+        # &url(~p"/users/reset_password/#{&1}")
+        fn token ->
+          "https://phoenix-production-4fd5.up.railway.app/users/reset_password/#{token}"
+        end
+
       )
     end
 
