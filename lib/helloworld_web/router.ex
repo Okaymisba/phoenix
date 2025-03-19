@@ -21,6 +21,8 @@ defmodule HelloworldWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    get "/tasks", TaskController, :new
+    post "/tasks", TaskController, :create
   end
 
   # Other scopes may use custom stacks.
