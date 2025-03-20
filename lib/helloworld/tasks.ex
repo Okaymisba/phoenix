@@ -8,6 +8,16 @@ defmodule Helloworld.Tasks do
 
   alias Helloworld.Tasks.Task
 
+  def list_todays_tasks(user_id) do
+    today = Date.utc_today()
+
+    from(t in Task,
+      where: t.due_date == ^today and t.user_id == ^user_id,
+      order_by: [asc: t.inserted_at]
+    )
+    |> Repo.all()
+  end
+
   @doc """
   Returns the list of tasks.
 

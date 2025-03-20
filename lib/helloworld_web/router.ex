@@ -23,6 +23,7 @@ defmodule HelloworldWeb.Router do
     get "/", PageController, :home
     get "/tasks", TaskController, :new
     post "/tasks", TaskController, :create
+    put "/tasks/:id/toggle_complete", PageController, :toggle_complete
   end
 
   # Other scopes may use custom stacks.

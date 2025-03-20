@@ -6,6 +6,7 @@ defmodule Helloworld.Tasks.Task do
     field :priority, :integer
     field :description, :string
     field :title, :string
+    field :completed, :boolean, default: false
     field :due_date, :date
     field :user_id, :id
 
@@ -15,7 +16,7 @@ defmodule Helloworld.Tasks.Task do
   @doc false
   def changeset(task, attrs) do
     task
-    |> cast(attrs, [:title, :description, :due_date, :priority, :user_id])
+    |> cast(attrs, [:title, :description, :due_date, :priority, :user_id, :completed])
     |> validate_required([:title, :description, :due_date, :priority, :user_id])
   end
 end
