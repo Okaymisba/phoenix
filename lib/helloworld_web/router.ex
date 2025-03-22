@@ -21,7 +21,6 @@ defmodule HelloworldWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
-    get "/tasks", TaskController, :new
     post "/tasks", TaskController, :create
     put "/tasks/:id/toggle_complete", PageController, :toggle_complete
   end

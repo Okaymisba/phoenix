@@ -4,11 +4,6 @@ defmodule HelloworldWeb.TaskController do
   alias Helloworld.Tasks
   alias Helloworld.Tasks.Task
 
-  def new(conn, _params) do
-    changeset = Tasks.change_task(%Task{})
-    render(conn, :new, changeset: changeset)
-  end
-
   def create(conn, %{"task" => task_params}) do
     user = conn.assigns.current_user
     task_params = Map.put(task_params, "user_id", user.id)

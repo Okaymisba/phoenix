@@ -2,7 +2,6 @@ defmodule HelloworldWeb.PageController do
   use HelloworldWeb, :controller
 
   alias Helloworld.Tasks
-  alias Helloworld.Tasks.Task
 
   def home(conn, _params) do
     # The home page is often custom made,

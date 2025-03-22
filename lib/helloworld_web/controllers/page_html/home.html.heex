@@ -60,7 +60,7 @@
       <!-- Sidebar content -->
       <div class="space-y-4">
         <button>
-          <.link href={~p"/tasks"} class="text-red-600 font-semibold hover:underline">+ Add task </.link>
+          <.link id="add-task-button" class="text-red-600 font-semibold hover:underline">+ Add task </.link>
         </button>
         <a class="block text-gray-700 hover:text-black">Inbox</a>
         <a class="block text-gray-700 hover:text-black font-semibold">Today</a>
@@ -70,6 +70,65 @@
 
     <!-- Main content -->
     <main class="flex-1 p-6 overflow-y-auto">
+
+      <div id="task-modal"
+        class="hidden fixed inset-0 z-50 bg-black bg-opacity-30 backdrop-blur-sm flex items-center justify-center">
+        <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-xl">
+          <.simple_form :let={f} for={@conn.params["task"]} as={:task} action={~p"/tasks"} class="space-y-6">
+
+            <!-- Title -->
+            <.input field={f[:title]} type="text" label="Title"
+              class="w-full text-lg font-medium text-gray-900 border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+              placeholder="e.g., Schedule review by Mar 15 at 11am" required />
+
+            <!-- Description -->
+            <.input field={f[:description]} type="text" label="Description"
+              class="w-full text-gray-700 text-sm border border-gray-300 rounded-md px-4 py-2 resize-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+              placeholder="Description" />
+
+            <!-- Tags: Due Date + Priority -->
+            <div class="flex flex-wrap gap-4">
+              <!-- Due Date -->
+              <div class="flex-1">
+                <label class="text-sm font-medium text-gray-700 mb-1 block">Due Date</label>
+                <input type="date" name="task[due_date]"
+                  class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required />
+              </div>
+
+              <!-- Priority -->
+              <div class="flex-1">
+                <label class="text-sm font-medium text-gray-700 mb-1 block">Priority</label>
+                <.input field={f[:priority]} type="select"
+                  class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  options={[ {"Priority 1", "1" }, {"Priority 2", "2" }, {"Priority 3", "3" }, {"Priority 4", "4" }
+                  ]} />
+              </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="flex items-center justify-between pt-6 border-t border-gray-200">
+              <!-- Cancel Button -->
+              <.button id="cancel-task" type="button"
+                class="bg-gray-100 text-gray-800 px-5 py-2 rounded-md hover:bg-gray-200 transition">
+                Cancel
+              </.button>
+
+              <!-- Save Button -->
+              <.button class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md transition"
+                phx-disable-with="Saving...">
+                Add task
+              </.button>
+            </div>
+
+          </.simple_form>
+        </div>
+      </div>
+
+
+
+
+
       <h2 class="text-xl font-bold mb-4">Today's Tasks</h2>
 
       <ul class="space-y-4">
@@ -116,5 +175,21 @@
   </div>
 
 </body>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const modal = document.getElementById("task-modal");
+    const openBtn = document.getElementById("add-task-button");
+    const cancelBtn = document.getElementById("cancel-task");
+
+    openBtn.addEventListener("click", () => {
+      modal.classList.remove("hidden");
+    });
+
+    cancelBtn.addEventListener("click", () => {
+      modal.classList.add("hidden");
+    });
+  });
+</script>
+
 
 </html>
