@@ -9,7 +9,8 @@ defmodule HelloworldWeb.PageController do
     if conn.assigns[:current_user] do
       user = conn.assigns[:current_user]
       tasks = Tasks.list_todays_tasks(user.id)
-      render(conn, :home, tasks: tasks, layout: false)
+      overdue_tasks = Tasks.list_overdue_tasks()
+      render(conn, :home, tasks: tasks, overdue_tasks: overdue_tasks, layout: false)
     else
       redirect(conn, to: ~p"/users/log_in")
     end

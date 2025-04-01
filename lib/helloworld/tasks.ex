@@ -18,6 +18,16 @@ defmodule Helloworld.Tasks do
     |> Repo.all()
   end
 
+  def list_overdue_tasks do
+    today = Date.utc_today()
+
+    from(t in Task,
+      where: t.due_date < ^today and t.completed == false,
+      order_by: [asc: t.due_date]
+    )
+    |> Repo.all()
+  end
+
   @doc """
   Returns the list of tasks.
 
