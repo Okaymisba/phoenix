@@ -2,7 +2,6 @@ defmodule HelloworldWeb.TaskController do
   use HelloworldWeb, :controller
 
   alias Helloworld.Tasks
-  alias Helloworld.Tasks.Task
 
   def create(conn, %{"task" => task_params}) do
     user = conn.assigns.current_user

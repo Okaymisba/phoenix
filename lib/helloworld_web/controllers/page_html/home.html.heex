@@ -63,7 +63,10 @@
           <.link id="add-task-button" class="text-red-600 font-semibold hover:underline">+ Add task </.link>
         </button>
         <a class="block text-gray-700 hover:text-black">Inbox</a>
-        <a class="block text-gray-700 hover:text-black font-semibold">Today</a>
+        <button>
+          <.link href={~p"/tasks/today"} class="block text-gray-700 hover:text-black font-semibold">Today
+          </.link>
+        </button>
         <a class="block text-gray-700 hover:text-black">Upcoming</a>
       </div>
     </div>
