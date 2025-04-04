@@ -18,6 +18,16 @@ defmodule Helloworld.Tasks do
     |> Repo.all()
   end
 
+  def list_upcoming_tasks(user_id) do
+    today = Date.utc_today()
+
+    from(t in Task,
+      where: t.due_date >= ^today and t.user_id == ^user_id,
+      order_by: [asc: t.due_date]
+    )
+    |> Repo.all()
+  end
+
   def list_overdue_tasks do
     today = Date.utc_today()
 

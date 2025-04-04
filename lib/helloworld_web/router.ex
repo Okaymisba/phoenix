@@ -24,6 +24,7 @@ defmodule HelloworldWeb.Router do
     post "/tasks", TaskController, :create
     put "/tasks/:id/toggle_complete", PageController, :toggle_complete
     get "/tasks/today", PageController, :today
+    get "tasks/upcoming", PageController, :upcoming
   end
 
   # Other scopes may use custom stacks.

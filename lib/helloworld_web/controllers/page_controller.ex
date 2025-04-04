@@ -27,6 +27,17 @@ defmodule HelloworldWeb.PageController do
     end
   end
 
+  def upcoming(conn, _params) do
+    if conn.assigns[:current_user] do
+      user = conn.assigns[:current_user]
+      tasks = Tasks.list_upcoming_tasks(user.id)
+      overdue_tasks = Tasks.list_overdue_tasks()
+      render(conn, :upcoming, tasks: tasks, overdue_tasks: overdue_tasks, layout: false)
+    else
+      redirect(conn, to: ~p"/users/log_in")
+    end
+  end
+
   def toggle_complete(conn, %{"id" => id}) do
     task = Tasks.get_task!(id)
 
