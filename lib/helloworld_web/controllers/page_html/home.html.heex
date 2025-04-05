@@ -67,7 +67,9 @@
           <.link href={~p"/tasks/today"} class="block text-gray-700 hover:text-black font-semibold">Today
           </.link>
         </a>
-        <a><.link href={~p"/tasks/upcoming"} class="block text-gray-700 hover:text-black">Upcoming</.link></a>
+        <a>
+          <.link href={~p"/tasks/upcoming"} class="block text-gray-700 hover:text-black">Upcoming</.link>
+        </a>
       </div>
     </div>
 
@@ -132,98 +134,137 @@
 
 
 
-      <h2 class="text-xl font-bold mb-4">Today's Tasks</h2>
 
-      <h2>Overdue</h2>
+
       <%= if @overdue_tasks !=[] do %>
-        <ul>
-          <%= for task <- @overdue_tasks do %>
-            <li class="flex items-start justify-between p-4 border rounded-md shadow-sm">
-              <!-- Left: Checkbox + Title + Description -->
-              <div class="flex items-start space-x-3">
-                <!-- Form for checkbox toggle -->
-                <.form for={%{}} as={:task} method="put" action={~p"/tasks/#{task.id}/toggle_complete"} class="mt-1">
-                  <button type="submit" class={ "w-5 h-5 rounded-full border-2 transition-all duration-200 " <>
-                    if task.completed, do: "bg-green-500 border-green-500", else: "border-gray-400
-                    hover:border-gray-600"
-                    }>
-                  </button>
-                </.form>
+        <h2 class="text-lg font-semibold text-red-600 mt-6">Overdue Tasks</h2>
+        <%= for {date, tasks} <- Enum.group_by(@overdue_tasks, & &1.due_date) do %>
+          <h3 class="text-md font-semibold text-red-500 mt-4">
+            <%= date %>
+          </h3>
+          <ul class="space-y-4">
+            <%= for task <- tasks do %>
+              <li class="flex items-start justify-between p-4 border rounded-md shadow-sm bg-red-50">
+                <div class="flex items-start space-x-3">
+                  <.form for={%{}} as={:task} method="put" action={~p"/tasks/#{task.id}/toggle_complete"} class="mt-1">
+                    <button type="submit" class={ "w-5 h-5 rounded-full border-2 transition-all duration-200 " <>
+                      if task.completed, do: "bg-green-500 border-green-500", else:
+                      "border-gray-400 hover:border-gray-600"
+                      }>
+                    </button>
+                  </.form>
 
+                  <div>
+                    <p class={"text-base font-medium " <> if task.completed, do: " line-through text-gray-500", else: ""
+                      }>
+                      <%= task.title %>
+                    </p>
+                    <p class="text-sm text-gray-500">
+                      <%= task.description %>
+                    </p>
+                  </div>
+                </div>
 
-
-
-                <!-- Title + description -->
-                <div>
-                  <p class={"text-base font-medium " <> if task.completed, do: " line-through text-gray-500", else: ""
-                    }>
-                    <%= task.title %>
-                  </p>
-                  <p class="text-sm text-gray-500">
-                    <%= task.description %>
+                <div class="text-right text-sm text-red-600">
+                  <p><strong>Priority:</strong>
+                    <%= task.priority %>
                   </p>
                 </div>
-              </div>
-
-              <!-- Right: Due Date & Priority -->
-              <div class="text-right text-sm text-red-600">
-                <p><strong>Due:</strong>
-                  <%= task.due_date %>
-                </p>
-                <p><strong>Priority:</strong>
-                  <%= task.priority %>
-                </p>
-              </div>
-            </li>
-            <% end %>
-        </ul>
-        <% else %>
-          <p>No overdue tasks 🎉</p>
+              </li>
+              <% end %>
+          </ul>
           <% end %>
+            <% end %>
+
+              <h2 class="text-xl font-bold mb-4 pt-4">Today's Tasks</h2>
+
+              <ul class="space-y-4">
+                <%= for task <- @tasks do %>
+                  <li class="flex items-start justify-between p-4 border rounded-md shadow-sm">
+                    <!-- Left: Checkbox + Title + Description -->
+                    <div class="flex items-start space-x-3">
+                      <!-- Form for checkbox toggle -->
+                      <.form for={%{}} as={:task} method="put" action={~p"/tasks/#{task.id}/toggle_complete"}
+                        class="mt-1">
+                        <button type="submit" class={ "w-5 h-5 rounded-full border-2 transition-all duration-200 " <>
+                          if task.completed, do: "bg-green-500 border-green-500", else: "border-gray-400
+                          hover:border-gray-600"
+                          }>
+                        </button>
+                      </.form>
 
 
-            <ul class="space-y-4">
-              <%= for task <- @tasks do %>
-                <li class="flex items-start justify-between p-4 border rounded-md shadow-sm">
-                  <!-- Left: Checkbox + Title + Description -->
-                  <div class="flex items-start space-x-3">
-                    <!-- Form for checkbox toggle -->
-                    <.form for={%{}} as={:task} method="put" action={~p"/tasks/#{task.id}/toggle_complete"}
-                      class="mt-1">
-                      <button type="submit" class={ "w-5 h-5 rounded-full border-2 transition-all duration-200 " <>
-                        if task.completed, do: "bg-green-500 border-green-500", else: "border-gray-400
-                        hover:border-gray-600"
-                        }>
-                      </button>
-                    </.form>
 
 
+                      <!-- Title + description -->
+                      <div>
+                        <p class={"text-base font-medium " <> if task.completed, do: " line-through text-gray-500",
+                          else: "" }>
+                          <%= task.title %>
+                        </p>
+                        <p class="text-sm text-gray-500">
+                          <%= task.description %>
+                        </p>
+                      </div>
+                    </div>
 
-
-                    <!-- Title + description -->
-                    <div>
-                      <p class={"text-base font-medium " <> if task.completed, do: " line-through text-gray-500",
-                        else: "" }>
-                        <%= task.title %>
+                    <!-- Right: Due Date & Priority -->
+                    <div class="text-right text-sm text-gray-600">
+                      <p><strong>Due:</strong>
+                        <%= task.due_date %>
                       </p>
-                      <p class="text-sm text-gray-500">
-                        <%= task.description %>
+                      <p><strong>Priority:</strong>
+                        <%= task.priority %>
                       </p>
                     </div>
-                  </div>
+                  </li>
+                  <% end %>
+              </ul>
 
-                  <!-- Right: Due Date & Priority -->
-                  <div class="text-right text-sm text-gray-600">
-                    <p><strong>Due:</strong>
-                      <%= task.due_date %>
-                    </p>
-                    <p><strong>Priority:</strong>
-                      <%= task.priority %>
-                    </p>
-                  </div>
-                </li>
-                <% end %>
-            </ul>
+              <h2 class="text-xl font-bold mb-4 mt-8">Upcoming Tasks</h2>
+
+              <ul class="space-y-4">
+                <%= for task <- @upcoming_tasks do %>
+                  <li class="flex items-start justify-between p-4 border rounded-md shadow-sm">
+                    <!-- Left: Checkbox + Title + Description -->
+                    <div class="flex items-start space-x-3">
+                      <!-- Form for checkbox toggle -->
+                      <.form for={%{}} as={:task} method="put" action={~p"/tasks/#{task.id}/toggle_complete"}
+                        class="mt-1">
+                        <button type="submit" class={ "w-5 h-5 rounded-full border-2 transition-all duration-200 " <>
+                          if task.completed, do: "bg-green-500 border-green-500", else: "border-gray-400
+                          hover:border-gray-600"
+                          }>
+                        </button>
+                      </.form>
+
+
+
+
+                      <!-- Title + description -->
+                      <div>
+                        <p class={"text-base font-medium " <> if task.completed, do: " line-through text-gray-500",
+                          else: "" }>
+                          <%= task.title %>
+                        </p>
+                        <p class="text-sm text-gray-500">
+                          <%= task.description %>
+                        </p>
+                      </div>
+                    </div>
+
+                    <!-- Right: Due Date & Priority -->
+                    <div class="text-right text-sm text-gray-600">
+                      <p><strong>Due:</strong>
+                        <%= task.due_date %>
+                      </p>
+                      <p><strong>Priority:</strong>
+                        <%= task.priority %>
+                      </p>
+                    </div>
+                  </li>
+                  <% end %>
+              </ul>
 
     </main>
   </div>
